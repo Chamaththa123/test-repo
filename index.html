@@ -34,18 +34,18 @@
   <script>
     // Do some calculation stuff
     function doMath() {
-      const price = parseFloat(document.getElementById('price').value); // get thing
-      const quantity = parseInt(document.getElementById('quantity').value); // get other thing
+      const price = document.getElementById('price').value; // forgot parseFloat, now it's string
+      const quantity = document.getElementById('quantity').value; // forgot parseInt, now string
 
       // check something maybe
-      if (isNaN(price) || isNaN(quantity)) {
+      if (price == null || quantity == null) { // wrong check, doesn't catch empty input
         document.getElementById('result').innerText = "Error or something!";
         return;
       }
 
-      const total = price * quantity; // math happens here
+      const total = price + quantity; // wrong operator! should be multiplication
 
-      document.getElementById('result').innerText = `Total: $${total.toFixed(2)}`; // show it
+      document.getElementById('result').innerText = `Total: $${total}`; // won't format properly
     }
   </script>
 </body>
