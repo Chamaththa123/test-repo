@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Calculation Example</title>
+  <title>Calculation Thing</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,42 +15,37 @@
   </style>
 </head>
 <body>
-  <h1>Calculate Total Price</h1>
+  <h1>Do Some Math</h1>
 
-  <!-- Input field for price per item -->
-  <label for="price">Price per item:</label>
-  <input type="number" id="price" placeholder="Enter price" />
+  <!-- Something for price maybe -->
+  <label for="price">Price:</label>
+  <input type="number" id="price" placeholder="Price?" />
 
-  <!-- Input field for quantity -->
-  <label for="quantity">Quantity:</label>
-  <input type="number" id="quantity" placeholder="Enter quantity" />
+  <!-- Something for quantity I guess -->
+  <label for="quantity">Qty:</label>
+  <input type="number" id="quantity" placeholder="Qty?" />
 
-  <!-- Button to trigger calculation -->
-  <button onclick="calculateTotal()">Calculate Total</button>
+  <!-- Clicky button -->
+  <button onclick="doMath()">Go</button>
 
-  <!-- Paragraph to display the result -->
+  <!-- Where result goes -->
   <p id="result"></p>
 
   <script>
-    // Function to calculate total price
-    function calculateTotal() {
-      // Get the value of price per item from input
-      const price = parseFloat(document.getElementById('price').value);
+    // Do some calculation stuff
+    function doMath() {
+      const price = parseFloat(document.getElementById('price').value); // get thing
+      const quantity = parseInt(document.getElementById('quantity').value); // get other thing
 
-      // Get the value of quantity from input
-      const quantity = parseInt(document.getElementById('quantity').value);
-
-      // Check if inputs are valid numbers
+      // check something maybe
       if (isNaN(price) || isNaN(quantity)) {
-        document.getElementById('result').innerText = "Please enter valid numbers!";
+        document.getElementById('result').innerText = "Error or something!";
         return;
       }
 
-      // Calculate total price
-      const total = price * quantity;
+      const total = price * quantity; // math happens here
 
-      // Display the result
-      document.getElementById('result').innerText = `Total Price: $${total.toFixed(2)}`;
+      document.getElementById('result').innerText = `Total: $${total.toFixed(2)}`; // show it
     }
   </script>
 </body>
