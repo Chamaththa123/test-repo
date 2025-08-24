@@ -1,52 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculation Thing</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    input {
-      margin: 5px 0;
-    }
-  </style>
+  <title>Security Test Page</title>
 </head>
 <body>
-  <h1>Do Some Math</h1>
+  <h1>Vulnerability Testing</h1>
 
-  <!-- Something for price maybe -->
-  <label for="price">Price:</label>
-  <input type="number" id="price" placeholder="Price?" />
-
-  <!-- Something for quantity I guess -->
-  <label for="quantity">Qty:</label>
-  <input type="number" id="quantity" placeholder="Qty?" />
-
-  <!-- Clicky button -->
-  <button onclick="doMath()">Go</button>
-
-  <!-- Where result goes -->
-  <p id="result"></p>
-
+  <!-- XSS Vulnerability -->
+  <div id="xssTest"></div>
   <script>
-    // Do some calculation stuff
-    function doMath() {
-      const price = document.getElementById('price').value; // forgot parseFloat, now it's string
-      const quantity = document.getElementById('quantity').value; // forgot parseInt, now string
+    // XSS: innerHTML assignment
+    document.getElementById("xssTest").innerHTML = location.search;
 
-      // check something maybe
-      if (price == null || quantity == null) { // wrong check, doesn't catch empty input
-        document.getElementById('result').innerText = "Error or something!";
-        return;
-      }
+    // SQL Injection
+    const mysql = require("mysql");
+    const connection = mysql.createConnection({});
+    let userId = 5;
+    connection.query(`SELECT * FROM users WHERE id = ${userId}`);
 
-      const total = price + quantity; // wrong operator! should be multiplication
+    // Command Injection
+    const { exec } = require("child_process");
+    exec("ls -la " + userInput);
 
-      document.getElementById('result').innerText = `Total: $${total}`; // won't format properly
-    }
+    // Hardcoded secret
+    const apiKey = "12345-ABCDE-SECRET";
+
+    // Insecure random
+    const randomNumber = Math.random();
+
+    // Prototype pollution
+    Object.prototype.polluted = "yes";
+
+    // Insecure deserialization
+    const data = '{"username":"test"}';
+    const parsed = JSON.parse(data);
+
+    // Weak crypto
+    const crypto = require("crypto");
+    const hash = crypto.createHash("md5").update("password").digest("hex");
+
+    // Information disclosure
+    console.log("User password: secret123");
+
+    // Insecure communication
+    fetch("http://example.com/api/data");
   </script>
 </body>
 </html>
