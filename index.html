@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Security Test Page</title>
+  <title>Security Test Page - Extended Vulnerabilities</title>
 </head>
 <body>
   <h1>Vulnerability Testing</h1>
@@ -9,41 +9,86 @@
   <!-- XSS Vulnerability -->
   <div id="xssTest"></div>
   <script>
-    // XSS: innerHTML assignment
+    // 🔴 XSS via innerHTML with unsanitized input
     document.getElementById("xssTest").innerHTML = location.search;
 
-    // SQL Injection
+    // 🔴 SQL Injection
     const mysql = require("mysql");
-    const connection = mysql.createConnection({});
-    let userId = 5;
-    connection.query(`SELECT * FROM users WHERE id = ${userId}`);
+    const connection = mysql.createConnection({
+      host: "localhost",
+      user: "root",   // 🔴 Hardcoded DB credentials
+      password: "root123",
+      database: "test"
+    });
+    let userId = "' OR 1=1 --"; // bad input
+    connection.query("SELECT * FROM users WHERE id = " + userId);
 
-    // Command Injection
+    // 🔴 Command Injection
     const { exec } = require("child_process");
+    const userInput = "; rm -rf /"; // malicious input
     exec("ls -la " + userInput);
 
-    // Hardcoded secret
+    // 🔴 Hardcoded secret
     const apiKey = "12345-ABCDE-SECRET";
 
-    // Insecure random
+    // 🔴 Insecure random
     const randomNumber = Math.random();
 
-    // Prototype pollution
+    // 🔴 Prototype pollution
     Object.prototype.polluted = "yes";
 
-    // Insecure deserialization
-    const data = '{"username":"test"}';
+    // 🔴 Insecure deserialization
+    const data = '{"__proto__": {"hacked": true}}';
     const parsed = JSON.parse(data);
 
-    // Weak crypto
+    // 🔴 Weak crypto
     const crypto = require("crypto");
     const hash = crypto.createHash("md5").update("password").digest("hex");
 
-    // Information disclosure
+    // 🔴 Information disclosure
     console.log("User password: secret123");
 
-    // Insecure communication
+    // 🔴 Insecure communication (no HTTPS)
     fetch("http://example.com/api/data");
+
+    // 🔴 Exposed stack trace
+    try {
+      throw new Error("Something went wrong");
+    } catch (err) {
+      document.body.innerHTML += "<pre>" + err.stack + "</pre>";
+    }
+
+    // 🔴 Insecure regex (ReDoS)
+    const regex = /(a+)+$/;
+    regex.test("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!");
+
+    // 🔴 CSRF (no protection on sensitive request)
+    fetch("/deleteUser?id=1", { method: "POST" });
+
+    // 🔴 Unrestricted file upload simulation
+    const fs = require("fs");
+    function uploadFile(filePath) {
+      // No validation of file type or size
+      fs.copyFileSync(filePath, "/uploads/" + filePath);
+    }
+    uploadFile("malware.exe");
+
+    // 🔴 Insecure JWT usage
+    const jwt = require("jsonwebtoken");
+    const token = jwt.sign({ admin: true }, "weak-secret"); // hardcoded weak key
+
+    // 🔴 Missing Content Security Policy
+    // (Should normally set in <meta http-equiv="Content-Security-Policy">, but omitted)
+
+    // 🔴 Broken authentication simulation
+    function login(username, password) {
+      if (username && password) {
+        return true; // accepts any credentials
+      }
+      return false;
+    }
+    console.log("Login bypass:", login("attacker", "wrongpass"));
+
   </script>
 </body>
 </html>
