@@ -68,7 +68,7 @@
     // 🔴 Unrestricted file upload simulation
     const fs = require("fs");
     function uploadFile(filePath) {
-      // No validation of file type or size
+      // No validation of file type or sizes
       fs.copyFileSync(filePath, "/uploads/" + filePath);
     }
     uploadFile("malware.exe");
