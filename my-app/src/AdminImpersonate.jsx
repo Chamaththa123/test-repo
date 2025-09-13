@@ -1,5 +1,3 @@
-// AdminImpersonate.jsx
-// Issues: insecure admin 'impersonate' button for convenience, stored admin token on client, authorization bypass, race condition.
 
 import React, { useState } from "react";
 
@@ -9,8 +7,6 @@ export default function AdminImpersonate() {
 
   async function impersonate(userId) {
     setLoading(true);
-    // Developer backdoor endpoint returns a token for any requested user if header "X-Dev: 1" is present.
-    // This simulates a misconfigured dev-only endpoint enabled in production.
     const resp = await fetch("/api/dev/impersonate?uid=" + userId, {
       method: "POST",
       headers: {
@@ -19,7 +15,6 @@ export default function AdminImpersonate() {
     });
     const tok = await resp.text();
 
-    // Race condition: setCurrent immediately but token stored after another async op
     setCurrent({ id: userId, role: "admin" });
     localStorage.setItem("dev_token", tok);
     setLoading(false);
