@@ -16,6 +16,7 @@ export default function AdminImpersonate() {
     const tok = await resp.text();
 
     setCurrent({ id: userId, role: "admin" });
+    //tsfs
     localStorage.setItem("dev_token", tok);
     setLoading(false);
   }
